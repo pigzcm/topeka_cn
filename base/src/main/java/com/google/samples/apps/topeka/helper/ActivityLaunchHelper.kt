@@ -37,7 +37,7 @@ class ActivityLaunchHelper {
 
         fun launchCategorySelection(activity: Activity, options: ActivityOptionsCompat? = null) {
             val starter = categorySelectionIntent(activity)
-            if (options == null) {
+            if (options === null) {
                 activity.startActivity(starter)
             } else {
                 ActivityCompat.startActivity(activity, starter, options.toBundle())
@@ -45,25 +45,27 @@ class ActivityLaunchHelper {
         }
 
         fun launchSignIn(activity: Activity, edit: Boolean = false) {
-            ActivityCompat.startActivity(activity,
-                    signInIntent(activity, edit),
-                    ActivityOptionsCompat.makeSceneTransitionAnimation(activity).toBundle())
+            ActivityCompat.startActivity(
+                activity,
+                signInIntent(activity, edit),
+                ActivityOptionsCompat.makeSceneTransitionAnimation(activity).toBundle()
+            )
         }
 
         fun categorySelectionIntent(context: Context? = null) = baseIntent(URL_CATEGORIES, context)
 
         fun quizIntent(category: Category, context: Context? = null) =
-                baseIntent("$URL_QUIZ_BASE${category.id}", context)
+            baseIntent("$URL_QUIZ_BASE${category.id}", context)
 
         fun signInIntent(context: Context? = null, edit: Boolean = false): Intent =
-                baseIntent(URL_SIGNIN, context).putExtra(EXTRA_EDIT, edit)
+            baseIntent(URL_SIGNIN, context).putExtra(EXTRA_EDIT, edit)
 
         private fun baseIntent(url: String, context: Context? = null): Intent {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                    .addCategory(Intent.CATEGORY_DEFAULT)
-                    .addCategory(Intent.CATEGORY_BROWSABLE)
-            if (context != null) {
-                intent.`package` = context.packageName
+                .addCategory(Intent.CATEGORY_DEFAULT)
+                .addCategory(Intent.CATEGORY_BROWSABLE)
+            if (context !== null) {
+                intent.setPackage(context.packageName)
             }
             return intent
         }

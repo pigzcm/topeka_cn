@@ -18,6 +18,8 @@ package com.google.samples.apps.topeka.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.KeyEvent
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 import com.google.samples.apps.topeka.base.R
@@ -28,19 +30,25 @@ import com.google.samples.apps.topeka.helper.findFragmentById
 import com.google.samples.apps.topeka.helper.replaceFragment
 
 class SignInActivity : AppCompatActivity() {
-
+    private var mClickTime: Long? = null
+    private var mLastClickTime: Long? = null
+    private var login = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in)
-        if (savedInstanceState == null) {
-            replaceFragment(R.id.sign_in_container,
-                    SignInFragment.newInstance(isInEditMode || !isLoggedIn()))
+        if (savedInstanceState === null) {
+            replaceFragment(
+                R.id.sign_in_container,
+                SignInFragment.newInstance(isInEditMode || !isLoggedIn())
+            )
         }
     }
 
     override fun onStop() {
         super.onStop()
-        if (isLoggedIn()) finish()
+        if (isLoggedIn()) {
+            this.login = true
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -50,4 +58,37 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private val isInEditMode get() = intent.getBooleanExtra(EXTRA_EDIT, false)
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE) {
+            this.mClickTime = System.currentTimeMillis()
+            return true
+        }
+        return super.onKeyDown(keyCode, event)
+    }
+
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE) {
+            this.mClickTime?.let { time ->
+                if (System.currentTimeMillis() - time <= 1000) {
+                    if (mLastClickTime === null || (System.currentTimeMillis() - (mLastClickTime ?: -1)) >= 2000L) {
+                        Toast.makeText(this, "", Toast.LENGTH_SHORT)
+                            .apply {
+                                setText("再按一次退出")
+                            }.show()
+                        mLastClickTime = System.currentTimeMillis()
+                    } else {
+                        finish()
+                    }
+                }
+            }
+            return true
+        }
+        return super.onKeyUp(keyCode, event)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (!isLoggedIn() || !login) kotlin.system.exitProcess(0)
+    }
+    override fun onBackPressed() = Unit
 }

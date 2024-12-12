@@ -22,10 +22,12 @@ import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.transition.TransitionInflater
+import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import com.google.samples.apps.topeka.base.R as baseR
 import com.google.samples.apps.topeka.categories.R
 import com.google.samples.apps.topeka.fragment.CategorySelectionFragment
@@ -43,7 +45,8 @@ import com.google.samples.apps.topeka.model.Player
 import com.google.samples.apps.topeka.widget.AvatarView
 
 class CategorySelectionActivity : AppCompatActivity() {
-
+    private var mClickTime: Long? = null
+    private var mLastClickTime: Long? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_category_selection)
@@ -71,8 +74,10 @@ class CategorySelectionActivity : AppCompatActivity() {
     }
 
     private fun attachCategoryGridFragment() {
-        replaceFragment(R.id.category_container,
-                findFragmentById(R.id.category_container) ?: CategorySelectionFragment())
+        replaceFragment(
+            R.id.category_container,
+            findFragmentById(R.id.category_container) ?: CategorySelectionFragment()
+        )
         setProgressBarVisibility(View.GONE)
     }
 
@@ -83,8 +88,10 @@ class CategorySelectionActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         (findViewById<TextView>(R.id.score)).text =
-                getString(com.google.samples.apps.topeka.base.R.string.x_points,
-                        database().getScore())
+            getString(
+                com.google.samples.apps.topeka.base.R.string.x_points,
+                database().getScore()
+            )
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -101,11 +108,11 @@ class CategorySelectionActivity : AppCompatActivity() {
             }
         } else if (requestCode == REQUEST_LOGIN || requestCode == REQUEST_SAVE) {
             onSmartLockResult(
-                    requestCode,
-                    resultCode,
-                    data,
-                    success = { },
-                    failure = { requestLogin { updatePlayerViews(it) } })
+                requestCode,
+                resultCode,
+                data,
+                success = { },
+                failure = { requestLogin { updatePlayerViews(it) } })
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
@@ -122,10 +129,45 @@ class CategorySelectionActivity : AppCompatActivity() {
     private fun handleSignOut() {
         if (ApiLevelHelper.isAtLeast(Build.VERSION_CODES.LOLLIPOP)) {
             window.exitTransition = TransitionInflater.from(this)
-                    .inflateTransition(R.transition.category_enter)
+                .inflateTransition(R.transition.category_enter)
         }
         logout()
         ActivityLaunchHelper.launchSignIn(this, true)
         supportFinishAfterTransition()
     }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE) {
+            this.mClickTime = System.currentTimeMillis()
+            return true
+        }
+        return super.onKeyDown(keyCode, event)
+    }
+
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE) {
+            this.mClickTime?.let { time ->
+                if (System.currentTimeMillis() - time <= 1000) {
+                    if (mLastClickTime === null || (System.currentTimeMillis() - (mLastClickTime ?: -1)) >= 2000L) {
+                        Toast.makeText(this, "", Toast.LENGTH_SHORT)
+                            .apply {
+                                setText("再按一次退出")
+                            }.show()
+                        mLastClickTime = System.currentTimeMillis()
+                    } else {
+                        finish()
+                    }
+                }
+            }
+            return true
+        }
+        return super.onKeyUp(keyCode, event)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        kotlin.system.exitProcess(0)
+    }
+
+    override fun onBackPressed() = Unit
 }
