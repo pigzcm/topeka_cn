@@ -19,8 +19,8 @@ apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion rootProject.compileSdk
-
     defaultConfig {
+        namespace "com.google.samples.apps.topeka.quiz"
         minSdkVersion rootProject.minSdk
         targetSdkVersion rootProject.targetSdk
         versionCode 1
@@ -28,10 +28,14 @@ android {
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 
-    buildTypes {
-        release {
-            signingConfig signingConfigs.debug
-        }
+    // buildTypes {
+    //     release {
+    //         signingConfig signingConfigs.debug
+    //     }
+    // }
+    compileOptions {
+        sourceCompatibility = '17'
+        targetCompatibility = '17'
     }
 
     packagingOptions {

@@ -37,6 +37,7 @@
 
         <activity android:name="com.google.samples.apps.topeka.activity.SignInActivity"
             android:theme="@style/Topeka.SignInActivity"
+            android:exported="true"
             android:windowSoftInputMode="adjustPan">
 
             <intent-filter>

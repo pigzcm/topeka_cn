@@ -26,7 +26,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
-import com.google.samples.apps.topeka.R as baseR
+import com.google.samples.apps.topeka.base.R as baseR
 import com.google.samples.apps.topeka.categories.R
 import com.google.samples.apps.topeka.fragment.CategorySelectionFragment
 import com.google.samples.apps.topeka.helper.ActivityLaunchHelper

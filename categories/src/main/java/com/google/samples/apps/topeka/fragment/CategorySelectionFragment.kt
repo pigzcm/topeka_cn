@@ -73,7 +73,7 @@ class CategorySelectionFragment : Fragment(R.layout.fragment_categories) {
         if (requestCode == REQUEST_CATEGORY &&
                 resultCode == com.google.samples.apps.topeka.base.R.id.solved &&
                 data != null) {
-            adapter?.notifyItemChanged(data.getStringExtra(JsonAttributes.ID))
+            adapter?.notifyItemChanged(data.getStringExtra(JsonAttributes.ID)!!)
         }
         super.onActivityResult(requestCode, resultCode, data)
     }

@@ -99,7 +99,11 @@ fun Activity.onSmartLockResult(
         REQUEST_LOGIN -> {
             data?.run {
                 if (hasExtra(Credential.EXTRA_KEY)) {
-                    val player = Player(getParcelableExtra(Credential.EXTRA_KEY)).also {
+                    val p: Credential? = getParcelableExtra(Credential.EXTRA_KEY) as? Credential?
+                    if (p === null) {
+                        return@run
+                    }
+                    val player = Player(p).also {
                         storePlayerLocally(it)
                     }
                     success(player)

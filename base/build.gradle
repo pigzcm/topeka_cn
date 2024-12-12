@@ -21,17 +21,17 @@ android {
     compileSdkVersion rootProject.compileSdk
 
     defaultConfig {
+        namespace  "com.google.samples.apps.topeka.base"
         minSdkVersion rootProject.minSdk
         targetSdkVersion rootProject.targetSdk
         versionName "1.0"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
-
-    buildTypes {
-        release {
-            signingConfig signingConfigs.debug
-        }
+    compileOptions {
+        sourceCompatibility = '17'
+        targetCompatibility = '17'
     }
+    
 
 }
 

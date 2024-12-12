@@ -16,14 +16,16 @@
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-
 android {
     compileSdkVersion rootProject.compileSdk
-
+    
     defaultConfig {
+        namespace rootProject.NAMESPACE
+        applicationId rootProject.NAMESPACE
         targetSdkVersion rootProject.targetSdk
         minSdkVersion rootProject.minSdk
         versionCode 1
+        versionName "1.0_topeka"
     }
 
     buildTypes {

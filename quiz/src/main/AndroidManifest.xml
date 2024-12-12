@@ -16,7 +16,7 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:dist="http://schemas.android.com/apk/distribution"
-          package="com.google.samples.apps.topeka.quiz">
+          >
     <dist:module dist:instant="true">
         <dist:fusing dist:include="true" />
         <dist:delivery>
@@ -28,7 +28,8 @@
         <activity android:name="com.google.samples.apps.topeka.activity.QuizActivity"
                   android:launchMode="singleTop"
                   android:windowSoftInputMode="adjustPan"
-                  android:theme="@style/Topeka.QuizActivity">
+                  android:theme="@style/Topeka.QuizActivity"
+                  android:exported="true">
 
             <intent-filter android:autoVerify="true" android:order="1" >
                 <category android:name="android.intent.category.BROWSABLE" />

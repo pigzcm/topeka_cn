@@ -1,6 +1,9 @@
-.gradle
-.idea
+.gradle/
+.idea/
 .build
 local.properties
 *.iml
-build
+build/
+/lgradle.sh
+/lbuild.sh
+/lclean.sh

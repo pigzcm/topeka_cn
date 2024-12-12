@@ -44,6 +44,7 @@ class SignInActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         // Forwarding all results to SignInFragment for further handling.
         findFragmentById(R.id.sign_in_container)?.onActivityResult(requestCode, resultCode, data)
     }

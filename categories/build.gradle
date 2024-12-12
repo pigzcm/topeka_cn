@@ -19,8 +19,12 @@ apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion rootProject.compileSdk
-
+    compileOptions {
+        sourceCompatibility = '17'
+        targetCompatibility = '17'
+    }
     defaultConfig {
+        namespace "com.google.samples.apps.topeka.categories"
         minSdkVersion rootProject.minSdk
         targetSdkVersion rootProject.targetSdk
         versionCode 1
@@ -28,11 +32,7 @@ android {
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 
-    buildTypes {
-        release {
-            signingConfig signingConfigs.debug
-        }
-    }
+
 
     packagingOptions {
         pickFirst 'LICENSE.txt'
