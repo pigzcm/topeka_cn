@@ -230,6 +230,7 @@ class QuizActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        super.onBackPressed()
 
         ViewCompat.animate(toolbarBack!!)
                 .scaleX(0f)
@@ -253,7 +254,7 @@ class QuizActivity : AppCompatActivity() {
                 .setStartDelay(100L)
                 .setListener(object : ViewPropertyAnimatorListenerAdapter() {
                     @SuppressLint("NewApi")
-                    override fun onAnimationEnd(view: View?) {
+                    override fun onAnimationEnd(view: View) {
                         if (isFinishing ||
                                 ApiLevelHelper.isAtLeast(Build.VERSION_CODES.JELLY_BEAN_MR1) &&
                                 isDestroyed) return
@@ -302,7 +303,7 @@ class QuizActivity : AppCompatActivity() {
                 .alpha(0f)
                 .setInterpolator(interpolator)
                 .setListener(object : ViewPropertyAnimatorListenerAdapter() {
-                    override fun onAnimationEnd(view: View?) {
+                    override fun onAnimationEnd(view: View) {
                         fragmentContainer.visibility = View.VISIBLE
                         clickedView.visibility = View.GONE
                     }

@@ -47,6 +47,7 @@ import com.google.samples.apps.topeka.widget.AvatarView
 class CategorySelectionActivity : AppCompatActivity() {
     private var mClickTime: Long? = null
     private var mLastClickTime: Long? = null
+    private var needCallExit = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_category_selection)
@@ -121,6 +122,7 @@ class CategorySelectionActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (item.itemId == baseR.id.sign_out) {
             handleSignOut()
+            needCallExit = false
             true
         } else super.onOptionsItemSelected(item)
     }
@@ -166,7 +168,7 @@ class CategorySelectionActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        kotlin.system.exitProcess(0)
+        if (needCallExit) kotlin.system.exitProcess(0)
     }
 
     override fun onBackPressed() = Unit
